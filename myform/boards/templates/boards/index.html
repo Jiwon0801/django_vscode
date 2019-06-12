@@ -1,0 +1,12 @@
+{% extends 'boards/base.html' %}
+{% block content %}
+  <h1>게시글 목록</h1>
+  <a href="{% url 'boards:create' %}">[게시글 작성]</a>
+  <hr>
+  {% for board in boards  %}
+    <p>{{ board.pk }}</p>
+    <p>{{ board.title }}</p>
+    <a href="{% url 'boards:detail' board.pk %}">[글 상세보기]</a>
+    <hr>
+  {% endfor %}
+{% endblock  %}

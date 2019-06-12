@@ -1,0 +1,11 @@
+{% extends 'boards/base.html' %}
+{% block content %}
+  <h1>DTAIL</h1>
+  <p>번호 : {{ board.pk }}</p>
+  <p>제목 : {{ board.title }}</p>
+  <p>내용 : {{ board.content }}</p>
+  <p>생성시각 : {{ board.created_at }}</p>
+  <p>수정시각 : {{ board.updated_at }}</p>
+  <a href="{% url 'boards:index'%}">[back]</a>
+  
+{% endblock  %}
