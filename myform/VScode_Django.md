@@ -11,6 +11,8 @@ $ python -m venv form-vent #가상환경설정
 $ source form-venv/Scripts/activate # 가상환경동작
 (form-venv)
 
+$ python manage.py migrate
+
 $ deactivate
 ```
 
