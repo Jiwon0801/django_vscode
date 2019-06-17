@@ -24,7 +24,21 @@ $ deactivate
 
 # Bootstrap4
 
-![](C:\Users\student\Desktop\캡처.JPG)
+
+
+#### Installation
+
+- install using pip
+
+```shell
+pip install django-bootstrap4
+```
+
+- Add to 'INSTALLED_APPS' in your 'settings.py'
+
+```
+'bootstrap4'
+```
 
 
 

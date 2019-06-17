@@ -157,7 +157,7 @@ def change_password(request):
 
 ### Authorization
 
-- 위임, 권한부여
+- __위임, 권한부여__
 
 - 비로그인 상태로  create와 update로 넘어갈 수 있음
 - 처리되면 login 페이지로 넘어감
@@ -209,7 +209,7 @@ return render(request, 'accounts/auth_form.html', context)
 from django.conf import settings
 
 class Board(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+      user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 ```
 
 
@@ -217,6 +217,20 @@ class Board(models.Model):
 ### 로직 수정
 
 - 남의 글 수정, 삭제 못하게 막기
+
+```python
+def delete(request, board_pk):
+    board = get_object_or_404(Board, pk=board_pk)
+    # if-else 감싸기
+    if board.user == request.user: 
+        if request.method=='POST':
+            board.delete()
+            return redirect('boards:index')
+        else:
+            return redirect('boards:detail', board.pk)
+    else:
+        return redirect('boards:index')
+```
 
 
 
