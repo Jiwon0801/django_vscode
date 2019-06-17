@@ -37,7 +37,7 @@ pip install django-bootstrap4
 - Add to 'INSTALLED_APPS' in your 'settings.py'
 
 ```
-'bootstrap4'
+'bootstrap4',
 ```
 
 
