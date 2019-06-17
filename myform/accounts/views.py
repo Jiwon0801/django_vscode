@@ -25,7 +25,7 @@ def signup(request):
     else:
         form = UserCreationForm()
     context = {'form': form}
-    return render(request, 'accounts/signup.html', context)
+    return render(request, 'accounts/auth_form.html', context)
 
 def login(request):
     if request.method == 'POST':
@@ -36,7 +36,7 @@ def login(request):
     else:
         form = AuthenticationForm()
     context = {'form': form}
-    return render(request, 'accounts/login.html', context)
+    return render(request, 'accounts/auth_form.html', context)
 
 def logout(request):
     auth_logout(request)
@@ -56,7 +56,7 @@ def update(request):
     else:
         form = CustomUserChangeForm(instance=request.user) # 기존 정보 필요 하므로 instance
     context = {'form': form,}
-    return render(request, 'accounts/update.html', context)
+    return render(request, 'accounts/auth_form.html', context)
 
 def change_password(request):
     if request.method=='POST':
@@ -69,4 +69,4 @@ def change_password(request):
     else:
         form = PasswordChangeForm(request.user)
     context = {'form': form,}
-    return render(request, 'accounts/change_password.html', context)
+    return render(request, 'accounts/auth_form.html', context)

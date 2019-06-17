@@ -95,9 +95,39 @@ def update(request):
             form.save()
             return redirect('boards:index')
     else:
-        form = CustomUserChangeForm(instance=request.user) # 기존 정보 필요 하므로 instance
+        form = UserChangeForm(instance=request.user) # 기존 정보 필요 하므로 instance
     context = {'form': form,}
     return render(request, 'accounts/update.html', context)
+```
+
+- 너무 많은 내용이 ChangeForm에 나와있기 때문에 Custom 만들기
+
+```python
+#accounts/forms.py
+
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth import get_user_model
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('email', 'first_name', 'last_name',)
+```
+
+```python
+#accounts/views.py
+from .forms import CustomUserChangeForm
+
+def update(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('boards:index')
+    else:
+        form = CustomUserChangeForm(instance=request.user) # 기존 정보 필요 하므로 instance
+    context = {'form': form,}
+    return render(request, 'accounts/auth_form.html', context)
 ```
 
 
@@ -148,11 +178,49 @@ def update(request, board_pk):
 
 ### html 중복 제거
 
+```html
+#accounts/auth_form.html
+
+{% if request.resolver_match.url_name == 'signup' %}
+  <h1>회원가입</h1>
+{% elif request.resolver_match.url_name == 'login' %}
+  <h1>로그인</h1>
+{% elif request.resolver_match.url_name == 'update' %}
+  <h1>회원수정</h1>
+{% else %}
+  <h1>비번변경</h1>
+{% endif %}
+```
+
+
+
+```python
+# accounts/views.py
+
+return render(request, 'accounts/auth_form.html', context)
+```
+
 
 
 ###  User model
 
+```python
+# boards/models.py
+from django.conf import settings
+
+class Board(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+```
+
 
 
 ### 로직 수정
+
+- 남의 글 수정, 삭제 못하게 막기
+
+
+
+
+
+#### VS CODE sqlite extension download
 

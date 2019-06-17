@@ -22,6 +22,11 @@ def create(request):
             # content = form.cleaned_data.get('content')
             # # 검증을 통과한 꺠끗한 데이터를 form에서 가져와 board 인스턴스를 만든다.
             # board = Board.objects.create(title=title, content=content)
+            
+
+            board = form.save(commit=False)
+            board.user = request.user
+            
             board = form.save()
             return redirect('boards:detail', board.pk)
     # GET : 기본 form 인스턴스를 생성
@@ -41,28 +46,34 @@ def detail(request, board_pk):
 
 def delete(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
-    if request.method=='POST':
-        board.delete()
-        return redirect('boards:index')
+    if board.user == request.user: 
+        if request.method=='POST':
+            board.delete()
+            return redirect('boards:index')
+        else:
+            return redirect('boards:detail', board.pk)
     else:
-        return redirect('boards:detail', board.pk)
+        return redirect('boards:index')
 
 @login_required
 def update(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
-    if request.method=='POST':
-        # form에서 이미 존재하는 경우에는 instance  사용
-        form = BoardForm(request.POST, instance = board)
-        if form.is_valid():
-            # board.title = form.cleaned_data.get('title')
-            # board.content = form.cleaned_data.get('content')
-            # board.save()
-            board = form.save()
-            return redirect('boards:detail', board.pk)
-    else:
-        #form = BoardForm(initial=board.__dict__)
-        form = BoardForm(instance=board)
+    if board.user == request.user : 
+        if request.method=='POST':
+            # form에서 이미 존재하는 경우에는 instance  사용
+            form = BoardForm(request.POST, instance = board)
+            if form.is_valid():
+                # board.title = form.cleaned_data.get('title')
+                # board.content = form.cleaned_data.get('content')
+                # board.save()
+                board = form.save()
+                return redirect('boards:detail', board.pk)
+        else:
+            #form = BoardForm(initial=board.__dict__)
+            form = BoardForm(instance=board)
 
-    
+    else:
+        return redirect('boards:index')
+
     context = {'form':form, 'board' : board,}
     return render(request, 'boards/form.html', context)
