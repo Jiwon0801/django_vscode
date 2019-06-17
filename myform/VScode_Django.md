@@ -2,6 +2,10 @@
 
 
 
+### Gitbash 폴더 만들기
+
+
+
 ### 가상환경 설정
 
 ```shell
@@ -17,4 +21,24 @@ $ deactivate
 ```
 
 
+
+# Bootstrap4
+
+![](C:\Users\student\Desktop\캡처.JPG)
+
+
+
+```html
+{% load bootstrap4 %}
+
+{# Display a form #}
+
+<form action="/url/to/submit/" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+</form>
+```
 

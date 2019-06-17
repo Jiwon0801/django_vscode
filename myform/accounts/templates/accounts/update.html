@@ -1,0 +1,12 @@
+{% extends 'boards/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h1>회원수정</h1>
+<form action="" method="POST">
+  {% csrf_token %}
+  {% bootstrap_form form layout='horizontal'%}
+  {% buttons submit='OK' reset="Cancel"  button_class="btn-primary" %}
+  {% endbuttons %}
+</form>
+{% endblock %}

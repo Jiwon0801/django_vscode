@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from IPython import embed
+from django.contrib.auth.decorators import login_required
 from .models import Board
 from .forms import BoardForm
 
@@ -9,6 +10,7 @@ def index(request):
     context = {'boards': boards}
     return render(request, 'boards/index.html', context)
 
+@login_required
 def create(request):
     if request.method == 'POST':
         # DATA Binding: form 인스턴스 생성하고 요청 (request.POST)로 데이터를 채운다.
@@ -45,7 +47,7 @@ def delete(request, board_pk):
     else:
         return redirect('boards:detail', board.pk)
 
-
+@login_required
 def update(request, board_pk):
     board = get_object_or_404(Board, pk=board_pk)
     if request.method=='POST':
