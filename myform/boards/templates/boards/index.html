@@ -8,11 +8,10 @@
   {% endif %}
   
   <hr>
-  {% for board in boards  %}
-    <p><b>작성자: </b>{{ board.user }}</p>
-    <p>{{ board.pk }}</p>
-    <p>{{ board.title }}</p>
-    <a href="{% url 'boards:detail' board.pk %}">[글 상세보기]</a>
-    <hr>
-  {% endfor %}
+ 
+   {% for board in boards %}
+     <!-- _board.html -->
+     {% include "boards/_board.html" %}
+   {% endfor %}
+
 {% endblock  %}
