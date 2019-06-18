@@ -6,6 +6,7 @@
   <p>내용 : {{ board.content }}</p>
   <p>생성시각 : {{ board.created_at }}</p>
   <p>수정시각 : {{ board.updated_at }}</p>
+
   
 
   {% comment %} POST일떄는 form에 넣어준다.  {% endcomment %}
@@ -19,8 +20,38 @@
     </form>
     
   {% endif %}
+  <hr>
+  
+  
+  <h4>댓글</h4>
+  {% if user.is_authenticated %}
+    <p>{{ comments | length }}</p>
+    {% for comment in comments|dictsortreversed:"pk" %}
+      <p><strong>{{ comment.user }}</strong> </p>
+      
+      <li>
+       {{ comment.content}}
+       {% if comment.user == request.user %}
+        <form action="{% url 'boards:comments_delete' board.pk comment.pk %}" method="POST" style="display:inline;">
+          {% csrf_token %}
+          <input type="submit" value="삭제">
+        </form>
+       {% endif %}   
+      </li>
+    {% endfor %}
+  
+  {% else %}
+    <a href="{% url 'accounts:login'%}">댓글을 작성하려면 로그인하세요</a>
 
- 
+  {% endif %}
+  
+  <hr>
+  <h4>댓글 작성</h4>
+  <form action="{% url 'boards:comments_create' board.pk %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type="submit" value="작성">
+  </form>
   <a href="{% url 'boards:index'%}">[back]</a>
   
 {% endblock  %}
