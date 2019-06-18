@@ -8,7 +8,7 @@ class Board(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # USer model 1:N
-
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_boards')
 
     def __str__(self):
         return self.title
@@ -19,7 +19,6 @@ class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE ) # USer model 1:N
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     
-
-
     def __str__(self):
         return self.content
+
