@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth import update_session_auth_hash
-from .forms import CustomUserChangeForm
+from django.contrib.auth import update_session_auth_hash, get_user_model
+from .forms import CustomUserChangeForm, CustomUserCreationForm
+from boards.models import Board
 
 
 
@@ -14,7 +15,7 @@ def signup(request):
         return redirect('boards:index')
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             # form이 저장되고 user session을 create 한다.
             # 회원 가입 저장 시 바로 메인 페이지
@@ -23,7 +24,7 @@ def signup(request):
 
             return redirect('boards:index')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {'form': form}
     return render(request, 'accounts/auth_form.html', context)
 
@@ -70,3 +71,10 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
     context = {'form': form,}
     return render(request, 'accounts/auth_form.html', context)
+
+
+def profile(request, username):
+    person = get_object_or_404(get_user_model(), username=username )
+    
+    context = {'person':person}
+    return render(request, 'accounts/profile.html', context)

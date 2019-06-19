@@ -13,6 +13,7 @@
 <div class="container">
   {% if user.is_authenticated %}
     <h3>hello {{ user.username }} 
+    <a href="{% url 'profile' user.username %}">내프로필</a>
     <a href="{% url 'accounts:update' %}">회원수정</a>
     <a href="{% url 'accounts:change_password'%}">비번변경</a>
     <a href="{% url 'accounts:logout' %}">로그아웃</a>

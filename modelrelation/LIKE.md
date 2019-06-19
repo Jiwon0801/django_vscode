@@ -137,12 +137,3 @@ SQLite OpenDatabase
 ```
 
 
-
-
-## FOLLOW
-
-- User : User = M:N
-
-
-
-## Profile

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from IPython import embed
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib.auth import get_user_model
 from .models import Board, Comment
 from .forms import BoardForm, CommentForm
 
@@ -44,8 +45,17 @@ def detail(request, board_pk):
     
     comment_form = CommentForm()
     comments = board.comment_set.all()
+
+    # 게시글 작성자
+    person = get_object_or_404(get_user_model(), pk=board.user.pk)
     
-    context = { 'board': board, 'comment_form':comment_form, 'comments': comments,}
+    context = {
+        'board': board,
+        'comment_form':comment_form,
+        'comments': comments,
+        'person': person,
+        
+        }
     return render(request, 'boards/detail.html', context)
 
 
@@ -127,3 +137,11 @@ def like(request, board_pk):
     return redirect('boards:index')
 
    
+def follow(request, user_pk):
+    person = get_object_or_404(get_user_model(), pk=user_pk)
+    user = request.user
+    if person.followers.filter(pk=user.pk).exists():
+        person.followers.remove(user)
+    else:
+        person.followers.add(user)
+    return redirect('profile', person.username)
