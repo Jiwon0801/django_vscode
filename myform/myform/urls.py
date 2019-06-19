@@ -19,6 +19,7 @@ from accounts import views as accounts_views
 
 urlpatterns = [
     path('accounts/', include('accounts.urls')),
+    path('accounts/', include('allauth.urls')),
     path('boards/', include('boards.urls')),
     path('admin/', admin.site.urls), 
     #username이 모든 것을 포함할 수 있으므로 코드 순서 처리 상 마지막 
