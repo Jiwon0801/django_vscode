@@ -10,7 +10,7 @@
 
 ```shell
 student@M9037 MINGW64 ~/Desktop/jiwon/Django_VS/myform
-$ python -m venv form-vent #가상환경설정
+$ python -m venv form-venv #가상환경설정
 
 $ source form-venv/Scripts/activate # 가상환경동작
 (form-venv)

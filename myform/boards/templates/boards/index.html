@@ -13,5 +13,26 @@
      <!-- _board.html -->
      {% include "boards/_board.html" %}
    {% endfor %}
+   <script>
+    const likeButtons = document.querySelectorAll('.like-button')
+    likeButtons.forEach(button => {
+      button.addEventListener('click', function(event){
+        const boardId = event.target.dataset.id
+        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
+        axios.post(`/boards/${boardId}/like/`)
+          .then(response => {
+            document.querySelector(`#like-count-${boardId}`).innerText = response.data.count
+            if  (response.data.liked) {
+              event.target.style.color = 'crimson'
+            } else {
+              event.target.style.color = 'black'
+            }
+          })
+          .catch(error => console.log(error))
+      })
+    })
+  </script>
 
 {% endblock  %}

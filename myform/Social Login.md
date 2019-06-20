@@ -22,6 +22,18 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+
+# TEMPLATES 아래
+AUTHENTICATION_BACKENDS = (
+ 
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+)
+pip manage.py migrate
 ```
 
 - __urls.py__

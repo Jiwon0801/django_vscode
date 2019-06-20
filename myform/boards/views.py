@@ -3,8 +3,11 @@ from IPython import embed
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse, HttpResponseBadRequest
+
 from .models import Board, Comment
 from .forms import BoardForm, CommentForm
+
 
 # Create your views here.
 def index(request):
@@ -122,19 +125,30 @@ def comments_delete(request, board_pk, comment_pk):
 
 
 @login_required
+@require_POST #405 Error
 def like(request, board_pk):
-    board = get_object_or_404(Board, pk=board_pk)
-    user = request.user
-    # 해당 게시글에 좋아요를 누른 사용자 중에 현재 요청을 한 사용자가 존재한다면 (이미 좋아요 누른 상태)
-    if board.like_users.filter(pk=request.user.pk).exists():
-    # if user in board.like_users.all():
-       # 좋아요를 취소하고
-       board.like_users.remove(user)
-    # 좋아요를 누르지 않은 상태라면
+    if request.is_ajax():
+        board = get_object_or_404(Board, pk=board_pk)
+        user = request.user
+        # 해당 게시글에 좋아요를 누른 사용자 중에 현재 요청을 한 사용자가 존재한다면 (이미 좋아요 누른 상태)
+        if board.like_users.filter(pk=request.user.pk).exists():
+        # if user in board.like_users.all():
+        # 좋아요를 취소하고
+            board.like_users.remove(user)
+            liked = False
+        # 좋아요를 누르지 않은 상태라면
+        else:
+            # 좋아요를 누름
+            board.like_users.add(user)
+            liked = True
+        
+        context = {
+            'liked': liked,
+            'count': board.like_users.count(),
+        }
+        return JsonResponse(context)
     else:
-        # 좋아요를 누름
-        board.like_users.add(user)
-    return redirect('boards:index')
+        return HttpResponseBadRequest()
 
    
 def follow(request, user_pk):
